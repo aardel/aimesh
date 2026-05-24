@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Mesh Capability Card",
+  "type": "object",
+  "required": ["node_id", "capabilities"],
+  "properties": {
+    "node_id": { "type": "string" },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "query_modes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "stores_queries": { "type": "boolean" },
+    "max_block_size_mb": { "type": "integer" },
+    "trust": { "type": "object" }
+  }
+}

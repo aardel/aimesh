@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aimesh"
+version = "0.1.0"
+description = "Local-first, peer-to-peer modular AI for self-learning personal intelligence."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "LicenseRef-Undecided" }
+authors = [{ name = "Aaron Delia" }]
+keywords = ["ai", "local-first", "peer-to-peer", "modules", "personal-ai"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+aimesh = "aimesh.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["aimesh*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

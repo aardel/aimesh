@@ -1,0 +1,15 @@
+{
+  "node_id": "local-demo-node",
+  "capabilities": [
+    "printing.stickers.basic"
+  ],
+  "query_modes": [
+    "answer_only"
+  ],
+  "stores_queries": false,
+  "max_block_size_mb": 10,
+  "trust": {
+    "signed": false,
+    "reputation": 0.5
+  }
+}

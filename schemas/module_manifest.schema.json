@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Mesh Module Manifest",
+  "type": "object",
+  "required": ["module_id", "name", "version", "capabilities"],
+  "properties": {
+    "module_id": { "type": "string" },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "intents": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "required_fields": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "safety_level": { "type": "string" },
+    "sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

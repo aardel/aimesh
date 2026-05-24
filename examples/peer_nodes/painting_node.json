@@ -1,0 +1,17 @@
+{
+  "node_id": "peer-painting-node",
+  "capabilities": [
+    "painting.oil_cleaning.basic",
+    "painting.canvas_damage_triage"
+  ],
+  "query_modes": [
+    "answer_only",
+    "module_transfer"
+  ],
+  "stores_queries": false,
+  "max_block_size_mb": 10,
+  "trust": {
+    "signed": false,
+    "reputation": 0.5
+  }
+}

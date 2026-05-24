@@ -1,0 +1,21 @@
+{
+  "module_id": "printing_stickers_basic",
+  "name": "Printing Stickers Basic",
+  "version": "0.1.0",
+  "capabilities": [
+    "printing.stickers.basic"
+  ],
+  "intents": [
+    "quote_stickers"
+  ],
+  "required_fields": [
+    "quantity",
+    "width_mm",
+    "height_mm",
+    "material"
+  ],
+  "safety_level": "low",
+  "sources": [
+    "founder examples"
+  ]
+}
