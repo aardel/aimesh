@@ -46,10 +46,42 @@ Run the demo route:
 python -m aimesh demo
 ```
 
+Example output:
+
+```text
+AI Mesh local node: local-demo-node
+
+Request:
+  Capability needed: printing.stickers.basic
+  Question: Can the local node quote a simple sticker job?
+
+Decision:
+  Handle locally with local-demo-node.
+  Use module: printing_stickers_basic
+
+Why:
+  Smallest capable node found locally.
+```
+
 Route a specific capability request:
 
 ```bash
 python -m aimesh route --capability painting.oil_cleaning.basic --question "How do I clean this?"
+```
+
+This shows the first peer-routing proof:
+
+```text
+Decision:
+  Local node cannot handle this request.
+  Private context removed before peer routing.
+  Route to peer: peer-painting-node
+```
+
+For the raw structured decision:
+
+```bash
+python -m aimesh route --capability printing.stickers.basic --question "Quote stickers" --json
 ```
 
 ## Current Prototype
