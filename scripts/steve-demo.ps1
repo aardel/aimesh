@@ -58,6 +58,28 @@ if (-not (Test-Path -LiteralPath $python)) {
 
 Write-Host "Installing AI Mesh from the repo..."
 & $python -m pip --disable-pip-version-check install -q -e ".[dev]"
+if ($LASTEXITCODE -ne 0) {
+    throw "Could not install AI Mesh into the repo environment."
+}
+
+$activePython = $null
+if ($env:VIRTUAL_ENV) {
+    $candidatePython = Join-Path $env:VIRTUAL_ENV "Scripts\python.exe"
+    if ((Test-Path -LiteralPath $candidatePython) -and ($candidatePython -ne $python)) {
+        $activePython = $candidatePython
+        & $activePython -c "import aimesh" 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "Active shell environment already has AI Mesh."
+        }
+        else {
+            Write-Host "Installing AI Mesh into the active shell environment..."
+            & $activePython -m pip --disable-pip-version-check install -q --no-deps -e "."
+            if ($LASTEXITCODE -ne 0) {
+                throw "Could not install AI Mesh into the active shell environment."
+            }
+        }
+    }
+}
 
 Write-Host ""
 Write-Host "Demo 1: local smallest-capable-node routing"
@@ -74,3 +96,12 @@ Write-Host "Demo 3: module knowledge becomes local execution"
 Write-Host ""
 Write-Host "Verification"
 & $python -m pytest
+if ($LASTEXITCODE -ne 0) {
+    throw "AI Mesh verification failed."
+}
+
+if ($activePython) {
+    Write-Host ""
+    Write-Host "After this launcher, your current shell can run:"
+    Write-Host '  python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"'
+}
