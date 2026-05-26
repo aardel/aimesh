@@ -97,15 +97,20 @@ Write-Host "Demo 1: user examples become local rules"
 & $python -m aimesh learn-stickers
 
 Write-Host ""
-Write-Host "Demo 2: local smallest-capable-node routing"
+Write-Host "Demo 2: research note becomes an approved local module"
+& $python -m aimesh study examples/research/sticker_pricing_notes.md
+& $python -m aimesh approve-module printing_stickers_basic
+
+Write-Host ""
+Write-Host "Demo 3: local smallest-capable-node routing"
 & $python -m aimesh demo
 
 Write-Host ""
-Write-Host "Demo 3: peer routing with private context stripped"
+Write-Host "Demo 4: peer routing with private context stripped"
 & $python -m aimesh route --capability painting.oil_cleaning.basic --question "How do I clean this?"
 
 Write-Host ""
-Write-Host "Demo 4: learned rules become local execution"
+Write-Host "Demo 5: approved research becomes local execution"
 & $python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
 
 Write-Host ""

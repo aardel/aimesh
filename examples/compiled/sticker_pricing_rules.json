@@ -1,17 +1,20 @@
 {
-  "setup_eur": 12.0,
+  "setup_eur": 14.0,
   "materials": {
     "paper": {
-      "rate_per_cm2": 0.01
+      "rate_per_cm2": 0.009
     },
     "polyester": {
-      "rate_per_cm2": 0.016
+      "rate_per_cm2": 0.015
     },
     "vinyl": {
-      "rate_per_cm2": 0.012
+      "rate_per_cm2": 0.014
     }
   },
-  "lamination_rate_per_cm2": 0.008,
-  "source": "teacher_examples",
-  "example_count": 5
+  "lamination_rate_per_cm2": 0.006,
+  "source": "research_note",
+  "source_refs": [
+    "workshop pricing handbook"
+  ],
+  "checked": "2026-05-26"
 }

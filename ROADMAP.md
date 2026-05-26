@@ -26,6 +26,14 @@
 - Use the rule table in `quote_stickers`.
 - Show the proof in the one-command Steve demo.
 
+## Milestone 2B: Research Notes To Approved Modules
+
+- Study a sourced local research note.
+- Extract draft rules and tests.
+- Require approval before activation.
+- Activate approved research as local rules.
+- Keep source refs and checked dates with the compiled rules.
+
 ## Milestone 3: Vacuum Bag Memory
 
 - Implement active, warm, compressed, archived, and forgotten memory states.

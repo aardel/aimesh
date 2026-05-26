@@ -56,8 +56,9 @@ def quote_stickers(
     material: str,
     laminated: bool = False,
     rules_path: str | Path | None = None,
+    rules: dict[str, object] | None = None,
 ) -> SkillQuote:
-    rules = _load_rules(rules_path)
+    rules = rules or _load_rules(rules_path)
     area_cm2 = (width_mm * height_mm) / 100
     material_rate = _material_rate(material, rules)
     setup_eur = float(rules.get("setup_eur", 12.0))

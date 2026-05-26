@@ -8,6 +8,7 @@ from pathlib import Path
 from .learning import compile_sticker_pricing_rules
 from .loaders import load_capability_card, load_modules, load_peer_cards
 from .models import MeshRequest
+from .research import approve_research_draft, study_research_note
 from .router import route
 from .skills.printing import parse_sticker_quote, quote_stickers
 
@@ -41,6 +42,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Compile sticker pricing rules from teacher examples.",
     )
 
+    study_parser = subparsers.add_parser("study", help="Study a research note into a draft module.")
+    study_parser.add_argument("source", help="Local path or URL to study.")
+
+    approve_parser = subparsers.add_parser("approve-module", help="Approve a studied draft module.")
+    approve_parser.add_argument("module_id", help="Draft module id to approve.")
+
     args = parser.parse_args(argv)
 
     if args.command == "demo":
@@ -51,6 +58,10 @@ def main(argv: list[str] | None = None) -> int:
         return run_quote(args.text, rules_path=args.rules)
     if args.command == "learn-stickers":
         return run_learn_stickers()
+    if args.command == "study":
+        return run_study(args.source)
+    if args.command == "approve-module":
+        return run_approve_module(args.module_id)
 
     parser.error("Unknown command")
     return 2
@@ -100,6 +111,21 @@ def run_learn_stickers() -> int:
     rules_path = EXAMPLES_ROOT / "compiled" / "sticker_pricing_rules.json"
     rules = compile_sticker_pricing_rules(examples_path, rules_path)
     print(_format_learning_story(examples_path, rules_path, rules))
+    return 0
+
+
+def run_study(source: str) -> int:
+    draft_path = EXAMPLES_ROOT / "drafts" / "printing_stickers_basic.research_draft.json"
+    draft = study_research_note(source, draft_path)
+    print(_format_study_story(Path(source).name, draft_path, draft))
+    return 0
+
+
+def run_approve_module(module_id: str) -> int:
+    draft_path = EXAMPLES_ROOT / "drafts" / f"{module_id}.research_draft.json"
+    rules_path = EXAMPLES_ROOT / "compiled" / "sticker_pricing_rules.json"
+    approval = approve_research_draft(draft_path, rules_path)
+    print(_format_approval_story(approval))
     return 0
 
 
@@ -191,5 +217,35 @@ def _format_learning_story(examples_path: Path, rules_path: Path, rules) -> str:
             "  The user became the teacher.",
             "  Examples became local rules.",
             "  Local rules became execution.",
+        ]
+    )
+
+
+def _format_study_story(source_name: str, draft_path: Path, draft) -> str:
+    passed = sum(1 for test in draft["tests"] if test["passed"])
+    total = len(draft["tests"])
+    return "\n".join(
+        [
+            f"Research studied: {source_name}",
+            "",
+            f"Draft module: {draft['module_id']}",
+            f"Sources: {', '.join(draft['source_refs'])}",
+            f"Checked: {draft['checked']}",
+            f"Tests: {passed}/{total} passed",
+            f"Draft saved: {draft_path}",
+            "",
+            "Waiting for teacher approval.",
+        ]
+    )
+
+
+def _format_approval_story(approval) -> str:
+    return "\n".join(
+        [
+            f"Approved module: {approval['module_id']}",
+            f"Rules activated: {approval['rules_path']}",
+            "",
+            "Research rules are now active locally.",
+            "Book knowledge became an approved local skill.",
         ]
     )

@@ -25,6 +25,8 @@ def test_steve_demo_script_uses_repo_root_not_current_directory():
     assert "Follow-up command that works from any folder:" in script
     assert "Your active shell Python can also run:" in script
     assert "& $python -m aimesh learn-stickers" in script
+    assert "& $python -m aimesh study examples/research/sticker_pricing_notes.md" in script
+    assert "& $python -m aimesh approve-module printing_stickers_basic" in script
     assert "& $python -m aimesh demo" in script
     assert "& $python -m aimesh quote" in script
     assert "& $python -m pytest" in script

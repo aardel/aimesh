@@ -28,8 +28,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 
 That command finds or clones the repo, creates the repo-local virtual
 environment, installs AI Mesh from the correct folder, compiles sticker pricing
-rules from teacher examples, runs the local demo, runs the peer-routing demo,
-runs the local sticker quote skill, and runs the tests.
+rules from teacher examples, studies a sourced research note into a draft module,
+approves it locally, runs the local demo, runs the peer-routing demo, runs the
+local sticker quote skill, and runs the tests.
 If your PowerShell already has a virtual environment active, the launcher also
 checks whether that environment can run AI Mesh so follow-up commands work from
 the same prompt. If that environment is locked or outside the repo, the launcher
@@ -111,6 +112,8 @@ Run the first local executable skill:
 
 ```bash
 python -m aimesh learn-stickers
+python -m aimesh study examples/research/sticker_pricing_notes.md
+python -m aimesh approve-module printing_stickers_basic
 python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
 ```
 
@@ -138,13 +141,24 @@ Why this matters:
   Examples became local rules.
   Local rules became execution.
 
+Research studied: sticker_pricing_notes.md
+
+Draft module: printing_stickers_basic
+Sources: workshop pricing handbook
+Tests: 2/2 passed
+
+Waiting for teacher approval.
+
+Approved module: printing_stickers_basic
+Research rules are now active locally.
+
 Decision:
   Handle locally.
   Use module: printing_stickers_basic
   Run skill: quote_stickers
 
 Result:
-  Estimated price: EUR 42.00
+  Estimated price: EUR 44.00
 
 Why this matters:
   Repeated knowledge became local execution.
@@ -163,5 +177,6 @@ The project is intentionally plain Python and JSON for now. No cloud APIs, model
 inference, vector databases, heavyweight frameworks, or networking are included
 in this first milestone.
 
-The sticker quote command is the first tiny compiled-skill proof. It is not a
-production pricing engine yet.
+The sticker quote command is the first tiny compiled-skill proof. The research
+note is a controlled local "book" for the prototype, not a production pricing
+engine or trusted external knowledge source yet.

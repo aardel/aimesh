@@ -18,6 +18,8 @@ Current prototype skill:
 
 ```bash
 python -m aimesh learn-stickers
+python -m aimesh study examples/research/sticker_pricing_notes.md
+python -m aimesh approve-module printing_stickers_basic
 python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
 ```
 
@@ -26,5 +28,5 @@ local `quote_stickers` skill from `aimesh.skills.printing`. It is deliberately
 small, but it proves the principle:
 
 ```text
-teacher examples -> local rules -> tested function -> local execution
+teacher examples + research notes -> approved local rules -> tested function -> local execution
 ```
