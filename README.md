@@ -28,7 +28,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 
 That command finds or clones the repo, creates the repo-local virtual
 environment, installs AI Mesh from the correct folder, runs the local demo, runs
-the peer-routing demo, and runs the tests.
+the peer-routing demo, runs the local sticker quote skill, and runs the tests.
 
 If you already have the repo open:
 
@@ -102,6 +102,28 @@ For the raw structured decision:
 python -m aimesh route --capability printing.stickers.basic --question "Quote stickers" --json
 ```
 
+Run the first local executable skill:
+
+```bash
+python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
+```
+
+Example output:
+
+```text
+Decision:
+  Handle locally.
+  Use module: printing_stickers_basic
+  Run skill: quote_stickers
+
+Result:
+  Estimated price: EUR 42.00
+
+Why this matters:
+  Repeated knowledge became local execution.
+  No cloud. No peer. Smallest capable node won.
+```
+
 ## Current Prototype
 
 The router follows the smallest capable node rule:
@@ -113,3 +135,6 @@ The router follows the smallest capable node rule:
 The project is intentionally plain Python and JSON for now. No cloud APIs, model
 inference, vector databases, heavyweight frameworks, or networking are included
 in this first milestone.
+
+The sticker quote command is the first tiny compiled-skill proof. It is not a
+production pricing engine yet.

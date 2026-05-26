@@ -8,6 +8,7 @@ from pathlib import Path
 from .loaders import load_capability_card, load_modules, load_peer_cards
 from .models import MeshRequest
 from .router import route
+from .skills.printing import parse_sticker_quote, quote_stickers
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -26,12 +27,17 @@ def main(argv: list[str] | None = None) -> int:
     route_parser.add_argument("--question", required=True)
     route_parser.add_argument("--json", action="store_true", help="Print the raw route decision.")
 
+    quote_parser = subparsers.add_parser("quote", help="Run the local sticker quote skill.")
+    quote_parser.add_argument("text", help="Sticker quote request.")
+
     args = parser.parse_args(argv)
 
     if args.command == "demo":
         return run_demo(json_output=args.json)
     if args.command == "route":
         return run_route(args.capability, args.question, json_output=args.json)
+    if args.command == "quote":
+        return run_quote(args.text)
 
     parser.error("Unknown command")
     return 2
@@ -59,6 +65,19 @@ def run_route(capability: str, question: str, json_output: bool = False) -> int:
         print(json.dumps(asdict(decision), indent=2))
     else:
         print(_format_story(local_card.node_id, request, decision))
+    return 0
+
+
+def run_quote(text: str) -> int:
+    request = parse_sticker_quote(text)
+    quote = quote_stickers(
+        quantity=request.quantity,
+        width_mm=request.width_mm,
+        height_mm=request.height_mm,
+        material=request.material,
+        laminated=request.laminated,
+    )
+    print(_format_quote_story(text, quote))
     return 0
 
 
@@ -106,3 +125,27 @@ def _format_story(local_node_id: str, request: MeshRequest, decision) -> str:
         )
 
     return "\n".join(lines)
+
+
+def _format_quote_story(text: str, quote) -> str:
+    return "\n".join(
+        [
+            "AI Mesh local node: local-demo-node",
+            "",
+            "User:",
+            f"  {text}",
+            "",
+            "Decision:",
+            "  Handle locally.",
+            "  Use module: printing_stickers_basic",
+            f"  Run skill: {quote.skill_name}",
+            "",
+            "Result:",
+            f"  Estimated price: {quote.currency} {quote.total_eur:.2f}",
+            f"  Reason: {quote.reason}",
+            "",
+            "Why this matters:",
+            "  Repeated knowledge became local execution.",
+            "  No cloud. No peer. Smallest capable node won.",
+        ]
+    )

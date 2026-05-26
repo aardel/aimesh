@@ -68,5 +68,9 @@ Write-Host "Demo 2: peer routing with private context stripped"
 & $python -m aimesh route --capability painting.oil_cleaning.basic --question "How do I clean this?"
 
 Write-Host ""
+Write-Host "Demo 3: module knowledge becomes local execution"
+& $python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
+
+Write-Host ""
 Write-Host "Verification"
 & $python -m pytest
