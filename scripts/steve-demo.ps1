@@ -67,15 +67,26 @@ if ($env:VIRTUAL_ENV) {
     $candidatePython = Join-Path $env:VIRTUAL_ENV "Scripts\python.exe"
     if ((Test-Path -LiteralPath $candidatePython) -and ($candidatePython -ne $python)) {
         $activePython = $candidatePython
+        Push-Location -LiteralPath $env:TEMP
+        $previousErrorActionPreference = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
         & $activePython -c "import aimesh" 2>$null
-        if ($LASTEXITCODE -eq 0) {
+        $activeImportExitCode = $LASTEXITCODE
+        $ErrorActionPreference = $previousErrorActionPreference
+        Pop-Location
+        if ($activeImportExitCode -eq 0) {
             Write-Host "Active shell environment already has AI Mesh."
         }
         else {
             Write-Host "Installing AI Mesh into the active shell environment..."
-            & $activePython -m pip --disable-pip-version-check install -q --no-deps -e "."
-            if ($LASTEXITCODE -ne 0) {
-                throw "Could not install AI Mesh into the active shell environment."
+            $previousErrorActionPreference = $ErrorActionPreference
+            $ErrorActionPreference = "Continue"
+            & $activePython -m pip --disable-pip-version-check install -q --no-deps -e "." *> $null
+            $activeInstallExitCode = $LASTEXITCODE
+            $ErrorActionPreference = $previousErrorActionPreference
+            if ($activeInstallExitCode -ne 0) {
+                Write-Host "Active shell environment could not be updated. Use the repo Python command shown below."
+                $activePython = $null
             }
         }
     }
@@ -95,13 +106,17 @@ Write-Host "Demo 3: module knowledge becomes local execution"
 
 Write-Host ""
 Write-Host "Verification"
-& $python -m pytest
+$pytestTemp = Join-Path $env:TEMP "aimesh-pytest-$PID"
+& $python -m pytest --basetemp $pytestTemp
 if ($LASTEXITCODE -ne 0) {
     throw "AI Mesh verification failed."
 }
 
+Write-Host ""
+Write-Host "Follow-up command that works from any folder:"
+Write-Host "  & `"$python`" -m aimesh quote `"Quote 100 stickers, 50mm x 30mm, vinyl, laminated`""
 if ($activePython) {
     Write-Host ""
-    Write-Host "After this launcher, your current shell can run:"
+    Write-Host "Your active shell Python can also run:"
     Write-Host '  python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"'
 }

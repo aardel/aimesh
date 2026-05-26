@@ -31,7 +31,8 @@ environment, installs AI Mesh from the correct folder, runs the local demo, runs
 the peer-routing demo, runs the local sticker quote skill, and runs the tests.
 If your PowerShell already has a virtual environment active, the launcher also
 checks whether that environment can run AI Mesh so follow-up commands work from
-the same prompt.
+the same prompt. If that environment is locked or outside the repo, the launcher
+prints a full repo-Python command that works from any folder.
 
 If you already have the repo open:
 
@@ -112,7 +113,13 @@ python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
 ```
 
 On Windows, run the one-command demo first if your prompt is in
-`C:\WINDOWS\system32` or another folder outside the repo.
+`C:\WINDOWS\system32` or another folder outside the repo. If your prompt still
+uses a different active venv, use the full command printed by the launcher,
+which looks like:
+
+```powershell
+& "C:\Users\aardel\OneDrive\Documents\Ai Mesh\.venv\Scripts\python.exe" -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
+```
 
 Example output:
 
