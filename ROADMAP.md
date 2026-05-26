@@ -16,6 +16,15 @@
 - Add schema validation.
 - Add beginner-readable module examples.
 - Add module tests.
+- Prove teacher examples can compile into a local rule table.
+
+## Milestone 2A: Teacher Examples To Local Rules
+
+- Load sticker pricing examples from JSON.
+- Compile simple pricing rules from examples.
+- Save an inspectable local rule table.
+- Use the rule table in `quote_stickers`.
+- Show the proof in the one-command Steve demo.
 
 ## Milestone 3: Vacuum Bag Memory
 

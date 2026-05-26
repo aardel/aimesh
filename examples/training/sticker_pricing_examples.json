@@ -1,0 +1,44 @@
+{
+  "examples": [
+    {
+      "quantity": 100,
+      "width_mm": 50,
+      "height_mm": 30,
+      "material": "vinyl",
+      "laminated": true,
+      "total_eur": 42.0
+    },
+    {
+      "quantity": 100,
+      "width_mm": 50,
+      "height_mm": 30,
+      "material": "vinyl",
+      "laminated": false,
+      "total_eur": 30.0
+    },
+    {
+      "quantity": 100,
+      "width_mm": 50,
+      "height_mm": 30,
+      "material": "paper",
+      "laminated": false,
+      "total_eur": 27.0
+    },
+    {
+      "quantity": 100,
+      "width_mm": 50,
+      "height_mm": 30,
+      "material": "polyester",
+      "laminated": false,
+      "total_eur": 36.0
+    },
+    {
+      "quantity": 200,
+      "width_mm": 50,
+      "height_mm": 30,
+      "material": "paper",
+      "laminated": false,
+      "total_eur": 42.0
+    }
+  ]
+}

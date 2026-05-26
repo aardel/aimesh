@@ -93,15 +93,19 @@ if ($env:VIRTUAL_ENV) {
 }
 
 Write-Host ""
-Write-Host "Demo 1: local smallest-capable-node routing"
+Write-Host "Demo 1: user examples become local rules"
+& $python -m aimesh learn-stickers
+
+Write-Host ""
+Write-Host "Demo 2: local smallest-capable-node routing"
 & $python -m aimesh demo
 
 Write-Host ""
-Write-Host "Demo 2: peer routing with private context stripped"
+Write-Host "Demo 3: peer routing with private context stripped"
 & $python -m aimesh route --capability painting.oil_cleaning.basic --question "How do I clean this?"
 
 Write-Host ""
-Write-Host "Demo 3: module knowledge becomes local execution"
+Write-Host "Demo 4: learned rules become local execution"
 & $python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
 
 Write-Host ""

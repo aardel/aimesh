@@ -27,8 +27,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 ```
 
 That command finds or clones the repo, creates the repo-local virtual
-environment, installs AI Mesh from the correct folder, runs the local demo, runs
-the peer-routing demo, runs the local sticker quote skill, and runs the tests.
+environment, installs AI Mesh from the correct folder, compiles sticker pricing
+rules from teacher examples, runs the local demo, runs the peer-routing demo,
+runs the local sticker quote skill, and runs the tests.
 If your PowerShell already has a virtual environment active, the launcher also
 checks whether that environment can run AI Mesh so follow-up commands work from
 the same prompt. If that environment is locked or outside the repo, the launcher
@@ -109,6 +110,7 @@ python -m aimesh route --capability printing.stickers.basic --question "Quote st
 Run the first local executable skill:
 
 ```bash
+python -m aimesh learn-stickers
 python -m aimesh quote "Quote 100 stickers, 50mm x 30mm, vinyl, laminated"
 ```
 
@@ -124,6 +126,18 @@ which looks like:
 Example output:
 
 ```text
+AI Mesh Night School: sticker pricing
+
+Teacher examples loaded: 5
+Compiled local rule table:
+  setup_eur: 12.00
+  materials: paper, polyester, vinyl
+
+Why this matters:
+  The user became the teacher.
+  Examples became local rules.
+  Local rules became execution.
+
 Decision:
   Handle locally.
   Use module: printing_stickers_basic

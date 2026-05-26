@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import re
+import json
 from dataclasses import dataclass, field
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -53,12 +55,15 @@ def quote_stickers(
     height_mm: int,
     material: str,
     laminated: bool = False,
+    rules_path: str | Path | None = None,
 ) -> SkillQuote:
+    rules = _load_rules(rules_path)
     area_cm2 = (width_mm * height_mm) / 100
-    material_rate = _material_rate(material)
-    setup_eur = 12.0
+    material_rate = _material_rate(material, rules)
+    setup_eur = float(rules.get("setup_eur", 12.0))
     print_eur = quantity * area_cm2 * material_rate
-    lamination_eur = quantity * area_cm2 * 0.008 if laminated else 0.0
+    lamination_rate = float(rules.get("lamination_rate_per_cm2", 0.008))
+    lamination_eur = quantity * area_cm2 * lamination_rate if laminated else 0.0
     total_eur = round(setup_eur + print_eur + lamination_eur, 2)
 
     reason_parts = [
@@ -69,6 +74,8 @@ def quote_stickers(
     ]
     if laminated:
         reason_parts.append("lamination")
+    if rules.get("source"):
+        reason_parts.append(str(rules["source"]))
 
     return SkillQuote(
         skill_name="quote_stickers",
@@ -93,13 +100,24 @@ def _find_material(text: str) -> str:
     return ""
 
 
-def _material_rate(material: str) -> float:
-    rates = {
-        "paper": 0.010,
-        "vinyl": 0.012,
-        "polyester": 0.016,
+def _load_rules(rules_path: str | Path | None) -> dict[str, object]:
+    if rules_path:
+        return json.loads(Path(rules_path).read_text(encoding="utf-8"))
+    return {
+        "setup_eur": 12.0,
+        "materials": {
+            "paper": {"rate_per_cm2": 0.010},
+            "vinyl": {"rate_per_cm2": 0.012},
+            "polyester": {"rate_per_cm2": 0.016},
+        },
+        "lamination_rate_per_cm2": 0.008,
     }
+
+
+def _material_rate(material: str, rules: dict[str, object]) -> float:
+    rates = rules.get("materials", {})
     try:
-        return rates[material.lower()]
-    except KeyError as exc:
+        material_rule = rates[material.lower()]  # type: ignore[index]
+        return float(material_rule["rate_per_cm2"])
+    except (KeyError, TypeError) as exc:
         raise ValueError(f"Unsupported sticker material: {material}") from exc

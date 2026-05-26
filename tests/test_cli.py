@@ -80,3 +80,22 @@ def test_quote_cli_runs_local_skill():
     assert "Run skill: quote_stickers" in result.stdout
     assert "Estimated price: EUR 42.00" in result.stdout
     assert "No cloud. No peer. Smallest capable node won." in result.stdout
+
+
+def test_learn_cli_compiles_teacher_examples():
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "aimesh",
+            "learn-stickers",
+        ],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "Teacher examples loaded: 5" in result.stdout
+    assert "Compiled local rule table" in result.stdout
+    assert "The user became the teacher." in result.stdout

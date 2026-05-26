@@ -5,6 +5,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+from .learning import compile_sticker_pricing_rules
 from .loaders import load_capability_card, load_modules, load_peer_cards
 from .models import MeshRequest
 from .router import route
@@ -29,6 +30,16 @@ def main(argv: list[str] | None = None) -> int:
 
     quote_parser = subparsers.add_parser("quote", help="Run the local sticker quote skill.")
     quote_parser.add_argument("text", help="Sticker quote request.")
+    quote_parser.add_argument(
+        "--rules",
+        default=str(EXAMPLES_ROOT / "compiled" / "sticker_pricing_rules.json"),
+        help="Compiled pricing rules JSON.",
+    )
+
+    subparsers.add_parser(
+        "learn-stickers",
+        help="Compile sticker pricing rules from teacher examples.",
+    )
 
     args = parser.parse_args(argv)
 
@@ -37,7 +48,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "route":
         return run_route(args.capability, args.question, json_output=args.json)
     if args.command == "quote":
-        return run_quote(args.text)
+        return run_quote(args.text, rules_path=args.rules)
+    if args.command == "learn-stickers":
+        return run_learn_stickers()
 
     parser.error("Unknown command")
     return 2
@@ -68,7 +81,7 @@ def run_route(capability: str, question: str, json_output: bool = False) -> int:
     return 0
 
 
-def run_quote(text: str) -> int:
+def run_quote(text: str, rules_path: str | Path | None = None) -> int:
     request = parse_sticker_quote(text)
     quote = quote_stickers(
         quantity=request.quantity,
@@ -76,8 +89,17 @@ def run_quote(text: str) -> int:
         height_mm=request.height_mm,
         material=request.material,
         laminated=request.laminated,
+        rules_path=rules_path if Path(rules_path).exists() else None,
     )
     print(_format_quote_story(text, quote))
+    return 0
+
+
+def run_learn_stickers() -> int:
+    examples_path = EXAMPLES_ROOT / "training" / "sticker_pricing_examples.json"
+    rules_path = EXAMPLES_ROOT / "compiled" / "sticker_pricing_rules.json"
+    rules = compile_sticker_pricing_rules(examples_path, rules_path)
+    print(_format_learning_story(examples_path, rules_path, rules))
     return 0
 
 
@@ -147,5 +169,27 @@ def _format_quote_story(text: str, quote) -> str:
             "Why this matters:",
             "  Repeated knowledge became local execution.",
             "  No cloud. No peer. Smallest capable node won.",
+        ]
+    )
+
+
+def _format_learning_story(examples_path: Path, rules_path: Path, rules) -> str:
+    return "\n".join(
+        [
+            "AI Mesh Night School: sticker pricing",
+            "",
+            f"Teacher examples loaded: {rules['example_count']}",
+            f"Source: {examples_path}",
+            "",
+            "Compiled local rule table:",
+            f"  setup_eur: {rules['setup_eur']:.2f}",
+            f"  materials: {', '.join(rules['materials'].keys())}",
+            f"  lamination_rate_per_cm2: {rules['lamination_rate_per_cm2']:.3f}",
+            f"Output: {rules_path}",
+            "",
+            "Why this matters:",
+            "  The user became the teacher.",
+            "  Examples became local rules.",
+            "  Local rules became execution.",
         ]
     )
