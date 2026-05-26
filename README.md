@@ -20,7 +20,20 @@ sharing private request context with peers.
 
 ### Windows PowerShell
 
+From any PowerShell window, even if it opens in `C:\WINDOWS\system32`:
+
 ```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/aardel/aimesh/main/scripts/steve-demo.ps1 | iex"
+```
+
+That command finds or clones the repo, creates the repo-local virtual
+environment, installs AI Mesh from the correct folder, runs the local demo, runs
+the peer-routing demo, and runs the tests.
+
+If you already have the repo open:
+
+```powershell
+cd "$env:OneDrive\Documents\Ai Mesh"
 py -m venv .venv
 .venv\Scripts\activate
 pip install -e ".[dev]"
@@ -31,6 +44,7 @@ pytest
 ### macOS / Linux
 
 ```bash
+cd ~/aimesh
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
@@ -39,6 +53,10 @@ pytest
 ```
 
 ## CLI
+
+Run CLI commands from the repo folder, or install the package first. If
+PowerShell starts in `C:\WINDOWS\system32`, use the Windows one-command demo
+above.
 
 Run the demo route:
 
